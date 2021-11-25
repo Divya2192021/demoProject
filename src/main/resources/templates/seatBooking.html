@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Movie seat Booking</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+
+@import url("https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css");
+
+body {
+	font-family: "Montserrat", sans-serif;
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+  background-color: #242333;
+  color: #fff;
+  margin: 0;
+}
+
+* {
+	font-family: "Montserrat", sans-serif !important;
+  box-sizing: border-box;
+}
+
+.movie-container {
+  margin: 20px 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column
+}
+
+.movie-container select {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  border: 0;
+  padding: 5px 15px;
+  margin-bottom: 40px;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.container {
+  perspective: 1000px;
+  margin: 40px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.seat {
+  background-color: #444451;
+  height: 12px;
+  width: 15px;
+  margin: 3px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.selected {
+  background-color: #0081cb;
+}
+
+.occupied {
+  background-color: #fff;
+}
+
+.seat:nth-of-type(2) {
+  margin-right: 18px;
+}
+
+.seat:nth-last-of-type(2) {
+  margin-left: 18px;
+}
+
+.seat:not(.occupied):hover {
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.showcase .seat:not(.occupied):hover {
+  cursor: default;
+  transform: scale(1);
+}
+
+.showcase {
+  display: flex;
+  justify-content: space-between;
+  list-style-type: none;
+  background: rgba(0,0,0,0.1);
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #777;
+}
+
+.showcase li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+}
+
+.showcase li small {
+  margin-left: 2px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.screen {
+  background: #fff;
+  height: 70px;
+  width: 70%;
+  margin: 15px 0;
+  transform: rotateX(-45deg);
+  box-shadow: 0 3px 10px rgba(255,255,255,0.7);
+}
+
+p.text {
+  margin: 40px 0;
+}
+
+p.text span {
+  color: #0081cb;
+  font-weight: 600;
+  box-sizing: content-box;
+}
+
+.credits a {
+  color: #fff;
+}
+    </style>
+
+</head>
+<body>
+<div class="movie-container">
+    <form autocomplete="off" action="#" th:action="@{/booking}"
+          th:object="${booking}" method="post" class="form-horizontal"
+          role="form">
+        <div>Welcome <span th:text="${username}"></span></div>
+        <div></div>
+    <div th:field="*{theaterId}" th:value="111"></div>
+    <label>Pick a movie: </label>
+   <!-- <select id="movie" th:field="*{movieId}">
+       <option th:value="250">Interstellar (Rs. 250)</option>
+        <option th:value="200">Kabir Singh (Rs. 200)</option>
+        <option th:value="150">Duniyadari (Rs. 150)</option>
+        <option th:value="100">Natsamrat (Rs. 100)</option>-->
+        <select id="movie">
+        <option th:each="ob:${countryList}" th:value="${ob.movieId}"
+                th:text="${ob.movieName}" /></option>
+    </select>
+
+    <ul class="showcase">
+        <li>
+            <div class="seat"></div>
+            <small>N/A</small>
+        </li>
+        <li>
+            <div class="seat selected"></div>
+            <small>Selected</small>
+        </li>
+        <li>
+            <div class="seat occupied"></div>
+            <small>Occupied</small>
+        </li>
+    </ul>
+
+    <div class="container">
+        <div class="screen"></div>
+
+        <div class="row">
+            <div value="A1" class="seat"></div>
+            <div value="A2" class="seat"></div>
+            <div value="A3" class="seat"></div>
+            <div value="A4" class="seat"></div>
+            <div value="A5" class="seat"></div>
+            <div value="A6" class="seat"></div>
+            <div value="A7" class="seat"></div>
+            <div value="A8" class="seat"></div>
+        </div>
+        <div class="row">
+            <div value="B1" class="seat"></div>
+            <div value="B2" class="seat"></div>
+            <div value="B3" class="seat"></div>
+            <div value="B4" class="seat occupied"></div>
+            <div value="B5" class="seat occupied"></div>
+            <div value="B6" class="seat"></div>
+            <div value="B7" class="seat"></div>
+            <div value="B8" class="seat"></div>
+        </div>
+        <!--<div class="row">
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat occupied"></div>
+            <div class="seat occupied"></div>
+        </div>
+        <div class="row">
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+        </div>
+        <div class="row">
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+        </div>
+        <div class="row">
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+            <div class="seat"></div>
+        </div>-->
+        <!--<button>Confirm Selection</button>-->
+        <!--<div id="seats" th:field="*{seats}" th:value="S3"></div>-->
+        <button id="submit" th:onclick="getSeats()" type="submit" class="btn btn-primary btn-block disabled">Book Tickets</button>
+        <p class="text">
+            You have selected <span id="count">0</span> seats for the total price of Rs. <span id="total">0</span>
+        </p>
+        <p></p>
+    </div>
+
+    </form>
+</div>
+
+<script th:inline="javascript">
+
+      /*<![CDATA[*/
+
+         const container = document.querySelector('.container');
+const seats = document.querySelectorAll('.row .seat:not(.occupied)');
+const count = document.getElementById('count');
+const total = document.getElementById('total');
+const movieSelect = document.getElementById('movie');
+const seatList="";
+let ticketPrice = +movieSelect.value;
+
+//Update total and count
+function updateSelectedCount() {
+  const selectedSeats = document.querySelectorAll('.row .seat.selected');
+  const selectedSeatsCount = selectedSeats.length;
+  count.innerText = selectedSeatsCount;
+  total.innerText = selectedSeatsCount * ticketPrice;
+}
+
+//Movie Select Event
+movieSelect.addEventListener('change', e => {
+  ticketPrice = +e.target.value;
+  updateSelectedCount();
+});
+
+//Seat click event
+container.addEventListener('click', e => {
+  if (e.target.classList.contains('seat') &&
+     !e.target.classList.contains('occupied')) {
+    e.target.classList.toggle('selected');
+  }
+  updateSelectedCount();
+});
+
+function getSeats(){
+let selectedSeats="";
+let selectedSeatElement = document.querySelectorAll('.row .seat.selected');;
+for(let i=0;i<selectedSeatElement.length;i++){
+selectedSeats+=selectedSeatElement[i].getAttribute('value')+","
+}
+/*[[${seats}]]*/ =selectedSeats;
+//document.getElementById('seats').setAttribute("th:field",selectedSeats);
+}
+
+       /*]]>*/
+
+</script>
+</body>
+</html>
